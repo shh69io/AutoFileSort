@@ -34,7 +34,7 @@ To run this project on your local machine, follow these steps:
 1. **Run the Script**:
    In your terminal, navigate to the project folder and run the following command:
    ```bash
-   python file_organizer.py
+   python AutoFileSort.py
    ```
 
 2. **Enter the Directory Path**:
