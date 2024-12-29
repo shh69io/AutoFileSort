@@ -21,8 +21,8 @@ To run this project on your local machine, follow these steps:
    git clone https://github.com/yourusername/File-Organizer.git
    ```
 
-2. **Install Python 3.x**:  
-   Ensure Python 3.x is installed on your system. You can download it from the official site:  
+2. **Install Python 3.5**:  
+   Ensure Python 3.5 is installed on your system. You can download it from the official site:  
    [Python Downloads](https://www.python.org/downloads/)
 
 3. **Dependencies**:
