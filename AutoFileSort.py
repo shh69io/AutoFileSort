@@ -35,7 +35,7 @@ randStr = "".join(random.choices("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrst
 
 # Moving the files:
 extensionMap = {
-    'documents': ['.txt', '.pdf', '.docx', '.doc', '.xls', '.ppt', '.csv', '.json', '.xml', '.odt', '.ods', '.odp'],
+    'documents': ['.txt', '.pdf', '.docx', '.doc', '.xls', '.ppt', 'pptx', '.csv', '.json', '.xml', '.odt', '.ods', '.odp'],
     'images': ['.jpg', '.png', '.jpeg', '.gif', '.bmp', '.tiff', '.svg'],
     'audio': ['.mp3', '.wav', '.aac', '.ogg', '.flac', '.wma'],
     'video': ['.mp4', '.mkv', '.avi', '.mov', '.flv', '.wmv', '.webm'],
