@@ -1,6 +1,6 @@
 ### **AutoFileSort**
 
-A Python-based file organizer that helps users automatically categorize files into different directories based on their extensions. The program scans a given directory and moves files into categorized folders such as `Documents`, `Images`, `Audio`, `Video`, and `unsorted` for files with undefined extensions. It generates logs of the file movement, making it easier to track what was done.
+A Python-based file organizer that helps users automatically categorize files into different directories based on their extensions. The program scans a given directory and moves files into categorized folders such as `Documents`, `Images`, `Audio`, `Video`, `Archive`, `Scripts` and `unsorted` for files with undefined extensions. It generates logs of the file movement, making it easier to track what was done.
 
 ---
 
@@ -12,6 +12,7 @@ A Python-based file organizer that helps users automatically categorize files in
 - **Logging**: The program logs all file movements in a `.txt` log file with timestamps for traceability.
 - **Real-time Feedback**: The program provides real-time feedback via the command line, informing the user of files being moved.
 - **Hidden File Support**: The program now processes hidden files (files that start with a dot).
+- **Windows Compatibility**: Fixed the issue with file movement on Windows systems (previously caused by WinError 2).
 
 ---
 
@@ -23,8 +24,7 @@ To run this project on your local machine, follow these steps:
    git clone https://github.com/yourusername/AutoFileSort.git
 
 2. **Install Python 3.5+**:  
-   Ensure Python 3.5 or higher is installed on your system. You can download it from the official site:  
-   [Python Downloads](https://www.python.org/downloads/)
+   Ensure [Python 3.5](https://www.python.org/downloads/) or higher is installed on your system. You can download it from the official site.
 
 3. **Dependencies**:
    The project relies on built-in Python libraries, so no external dependencies are required.
@@ -64,7 +64,7 @@ To run this project on your local machine, follow these steps:
 
 1. **Input Directory**: The program asks the user to input the path to the directory that needs to be sorted. It validates whether the directory exists before proceeding.
 
-2. **Directory Creation**: If the `output` directory doesn't exist, it will be created. Additionally, folders for file categories (`documents`, `images`, `audio`, `video`, `archives`, `scripts` and `unsorted`) are dynamically created inside the `output` folder if a file of the respective file-type is to be sorted. 
+2. **Directory Creation**: If the `output` directory doesn't exist, it will be created. Additionally, folders for file categories (`documents`, `images`, `audio`, `video`, `archives`, `scripts` and `unsorted`) are dynamically created inside the `output` folder if a file of the respective file-type is to be sorted.
 
 3. **File Sorting**:
    - The program scans the files in the input directory.
