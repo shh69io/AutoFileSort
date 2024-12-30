@@ -1,12 +1,12 @@
 import os
-import shutil # Simplified the process of moving files.  
+import shutil
 import random
 from datetime import datetime
 
 
-# Input Directory, and Path: 
-while True: 
 
+# Input and Path: 
+while True:
     inputDirectory = input("Enter the name of the directory to be sorted: ")
 
     if inputDirectory.strip() != "":
@@ -21,86 +21,100 @@ while True:
 
 
 
-# Making the output direcotries: 
+# Making the output directories:
 outputPath = "output"
 if not os.path.exists(outputPath):
     os.makedirs(outputPath)
 
 
 
-# Random Identifier for logs: 
-randStr = ""
-for i in range(6):
-    randStr += random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
+# Random Identifier for logs:
+randStr = "".join(random.choices("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", k=6))
 
 
 
-# Moving the files: 
-extensionMap = {'documents': ['.txt', '.pdf', '.docx', '.doc', '.xls', '.ppt', '.csv', '.json', '.xml', '.odt', '.ods', '.odp'],
-                'images': ['.jpg', '.png', '.jpeg', '.gif', '.bmp', '.tiff', '.svg'],
-                'audio': ['.mp3', '.wav', '.aac', '.ogg', '.flac', '.wma'],
-                'video': ['.mp4', '.mkv', '.avi', '.mov', '.flv', '.wmv', '.webm'],
-                'archives' : ['.zip', '.rar', '.7z', '.tar', '.gz'],
-                'scripts': ['.py', '.java', '.cpp', '.js', '.html', '.css', '.json', '.xml']}
+# Moving the files:
+extensionMap = {
+    'documents': ['.txt', '.pdf', '.docx', '.doc', '.xls', '.ppt', '.csv', '.json', '.xml', '.odt', '.ods', '.odp'],
+    'images': ['.jpg', '.png', '.jpeg', '.gif', '.bmp', '.tiff', '.svg'],
+    'audio': ['.mp3', '.wav', '.aac', '.ogg', '.flac', '.wma'],
+    'video': ['.mp4', '.mkv', '.avi', '.mov', '.flv', '.wmv', '.webm'],
+    'archives': ['.zip', '.rar', '.7z', '.tar', '.gz'],
+    'scripts': ['.py', '.java', '.cpp', '.js', '.html', '.css', '.json', '.xml']
+}
 
 
 for root, dirs, files in os.walk(inputPath):
     for fileName in files:
         if not fileName.startswith("."):
             fileExtension = os.path.splitext(fileName)[1].lower()
+            moved = False
 
             for category, extensions in extensionMap.items():
                 if fileExtension in extensions:
-                    if not os.path.exists(os.path.join(outputPath, category)):
-                        os.makedirs(os.path.join(outputPath, category))
+                    categoryPath = os.path.join(outputPath, category)
 
-                    src = os.path.join(root, fileName) 
-                    desDir = os.path.join(outputPath, category)
-                    des = os.path.join(desDir, fileName)
+                    # Ensure the destination directory exists: 
+                    if not os.path.exists(categoryPath):
+                        try:
+                            os.makedirs(categoryPath)
+                        except Exception as e:
+                            print(f"Error creating category directory {categoryPath}: {e}")
+                            continue
+
+                    # Full paths: 
+                    src = os.path.join(root, fileName)
+                    des = os.path.join(categoryPath, fileName)
 
                     # Handling duplicate file names: 
                     if os.path.exists(des):
                         base, ext = os.path.splitext(fileName)
                         counter = 1
                         while os.path.exists(des):
-                            des = os.path.join(desDir, f"{base}_{counter}{ext}")
+                            des = os.path.join(categoryPath, f"{base}_{counter}{ext}")
                             counter += 1
 
                     try:
                         shutil.move(src, des)
-
+                        moved = True
                         print(f"Moved {fileName} from {root} to {category}")
 
+                        # Log the move
                         with open(f"log{randStr}.txt", "a") as logFile:
                             logFile.write(f"Moved {fileName} from {root} to output/{category}      [{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\n")
 
                     except Exception as e:
-
                         print(f"Error moving {fileName}: {e}")
 
+                        # Log the error
                         with open(f"log{randStr}.txt", "a") as logFile:
                             logFile.write(f"Error moving {fileName}: {e}.      [{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\n")
 
-                else:
-                    if not os.path.exists(os.path.join(outputPath, "unsorted")):
-                        os.makedirs(os.path.join(outputPath, "unsorted"))
+                    break
 
-                    src = os.path.join(root, fileName)
-                    desDir = os.path.join(outputPath, "unsorted")
-                    des = os.path.join(desDir, fileName)
+            # If the file doesn't match any category, move it to 'unsorted': 
+            if not moved:
+                unsortedPath = os.path.join(outputPath, "unsorted")
 
+                if not os.path.exists(unsortedPath):
                     try:
-                        shutil.move(src, des)
-
-                        print(f"Moved {fileName} from {root} to unsorted")
-
-                        with open(f"log{randStr}.txt", "a") as logFile:
-                            logFile.write(f"Moved {fileName} from {root} to output/unsorted      [{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\n")
-
+                        os.makedirs(unsortedPath)
                     except Exception as e:
+                        print(f"Error creating unsorted directory {unsortedPath}: {e}")
+                        continue  # Skip to the next file
 
-                        print(f"Error moving {fileName}: {e}")
+                src = os.path.join(root, fileName)
+                des = os.path.join(unsortedPath, fileName)
 
-                        with open(f"log{randStr}.txt", "a") as logFile:
-                            logFile.write(f"Error moving {fileName}: {e}.      [{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\n")
+                try:
+                    shutil.move(src, des)
+                    print(f"Moved {fileName} from {root} to unsorted")
 
+                    with open(f"log{randStr}.txt", "a") as logFile:
+                        logFile.write(f"Moved {fileName} from {root} to output/unsorted      [{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\n")
+
+                except Exception as e:
+                    print(f"Error moving {fileName}: {e}")
+
+                    with open(f"log{randStr}.txt", "a") as logFile:
+                        logFile.write(f"Error moving {fileName}: {e}.      [{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\n")
