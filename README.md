@@ -71,4 +71,4 @@ output/
 ---
 
 ## License
-AutoFileSort is open-source and available under the [MIT License](LICENSE).
+AutoFileSort is open-source and available under the [MIT License](LICENSE.txt).
