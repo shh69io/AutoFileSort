@@ -5,9 +5,15 @@ AutoFileSort is a simple yet powerful Python tool designed to help you declutter
 ---
 
 ## Features
-- **Automatic File Sorting**: Categorizes files into predefined folders like `Documents`, `Images`, `Audio`, `Video`, etc. 
+- **Automatic File Sorting**: Categorizes files into predefined folders like `Documents`, `Images`, `Audio`, `Video`, etc.
 - **Customizable Configurations**: Supports custom `config.json` files for better control over file categorization.
-
+- **Enhanced Logging**: Logs now include timestamps and detailed summaries of file movements.
+- **Improved Error Handling**: Provides better error feedback if a file move operation fails, including specific error messages.
+- **File Permissions Check**: Checks file permissions before attempting to move them, ensuring there are no issues with read/write access.
+- **Optional Directory Structure Preservation**: Keep the original directory structure while organizing files into categories.
+- **Log Header**: A header is added to each log file to track the start date/time and the overall sorting process.
+- **File Type Summary**: A summary of how many files of each type were moved is displayed at the end and included in the log file.
+  
 ---
 
 ## Installation
@@ -16,7 +22,6 @@ AutoFileSort is a simple yet powerful Python tool designed to help you declutter
    git clone https://github.com/yourusername/AutoFileSort.git
    ```
 2. Ensure [Python 3.5+](https://www.python.org/downloads/) is installed on your system. No external libraries required!
-
 
 ---
 
@@ -41,6 +46,7 @@ AutoFileSort is a simple yet powerful Python tool designed to help you declutter
 2. **File Categorization**: Matches file extensions to categories defined in `config.json` or follows the default configuration.
 3. **Output Structure**: Creates categorized folders dynamically within the `output` directory.
 4. **Logging and Feedback**: Logs each file movement and provides real-time updates in the terminal.
+5. **Permission and Error Handling**: Ensures that files can be accessed and moved, with error details logged if issues arise.
 
 ---
 
@@ -64,9 +70,12 @@ output/
 
 ---
 
-## What's New in v1.1.0
-- **Exhaustive Configuration**: Introduced a comprehensive `config.json` supporting a wide range of file formats.
-- **Enhanced Logging**: Logs now include timestamps and detailed file movement summaries.
+## What's New in v1.2
+- **Improved Logging**: Log files now include a header with the start date/time and detailed summaries of each file movement.
+- **File Permissions Check**: Ensures files can be read/written before moving them, preventing access errors.
+- **Directory Structure Preservation**: Optionally preserve the directory structure when sorting files into categories.
+- **File Type Summary**: Display a summary of the number of files sorted into each category, included in the log.
+- **Error Handling Improvements**: Provide more informative error messages during file operations.
 
 ---
 
