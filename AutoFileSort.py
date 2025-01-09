@@ -6,7 +6,7 @@ import json
 import argparse    # For parsing CLI arguments
 
 
-
+# Default configuration (extendable)
 defaultConfig = {
     "documents": [
         ".txt", ".pdf", ".docx", ".doc", ".xls", ".xlsx", ".ppt", ".pptx", ".csv", ".json",
@@ -51,40 +51,30 @@ defaultConfig = {
 }
 
 
-
-
 def getInputDirectory():
     while True:
-        inputDirectory = input("Enter the name of the directory to be sorted: ")
-        if inputDirectory.strip() != "":
-            if os.path.exists(inputDirectory) and os.path.isdir(inputDirectory):
-                return os.path.abspath(inputDirectory)
-            else:
-                print("Directory not found. Try again...\n")
+        inputDirectory = input("Please enter the absolute path of the directory you wish to organize: ").strip()
+        if inputDirectory and os.path.isdir(inputDirectory):
+            return os.path.abspath(inputDirectory)
         else:
-            print("Directory names may not be invalid. Try again...")
-
+            print("Error: Invalid directory. Please ensure the path exists and try again.")
 
 
 def loadConfig(configFile):
     try:
-        with open(configFile, 'r') as configFile:
-            return json.load(configFile)
-
+        with open(configFile, 'r') as file:
+            return json.load(file)
     except FileNotFoundError:
         print(f"Error: Config file '{configFile}' not found. Using default settings...")
         return defaultConfig
-
     except json.JSONDecodeError as e:
         print(f"Error: Invalid JSON format in '{configFile}'. {e}")
         return defaultConfig
 
 
-
 def createOutputDirectory(path):
     if not os.path.exists(path):
         os.makedirs(path)
-
 
 
 def moveFile(src, des, logFile):
@@ -97,40 +87,31 @@ def moveFile(src, des, logFile):
 
     try:
         shutil.move(src, des)
-        logMessage = f"Moved {os.path.basename(src)} from {os.path.dirname(src)} to {os.path.dirname(des)}"
-
+        logMessage = f"SUCCESS: Moved '{os.path.basename(src)}' from '{os.path.dirname(src)}' to '{os.path.dirname(des)}'"
     except Exception as e:
-        logMessage = f"Error moving {os.path.basename(src)}: {e}"
+        logMessage = f"ERROR: Failed to move '{os.path.basename(src)}': {e}"
 
     with open(logFile, "a") as log:
-        log.write(f"{logMessage}      [{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]\n")
+        log.write(f"{logMessage}\n")
 
     print(logMessage)
 
 
-
 def sortFiles(inputPath, outputPath, extensionMap, logFile):
-
     createOutputDirectory(outputPath)
 
     for root, _, files in os.walk(inputPath):
-
         for fileName in files:
-
             if not fileName.startswith("."):
                 fileExtension = os.path.splitext(fileName)[1].lower()
                 moved = False
 
                 for category, extensions in extensionMap.items():
-
                     if fileExtension in extensions:
                         categoryPath = os.path.join(outputPath, category)
-
                         createOutputDirectory(categoryPath)
                         moveFile(os.path.join(root, fileName), os.path.join(categoryPath, fileName), logFile)
-
                         moved = True
-
                         break
 
                 if not moved:
@@ -139,23 +120,45 @@ def sortFiles(inputPath, outputPath, extensionMap, logFile):
                     moveFile(os.path.join(root, fileName), os.path.join(unsortedPath, fileName), logFile)
 
 
+def writeLogHeader(logFile):
+    with open(logFile, "w") as log:
+        log.write(f"--- Log File for AutoFileSort ---\n")
+        log.write(f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+        log.write(f"Sorting process started...\n")
+        log.write(f"--------------------------------\n")
+
+
+def showLogFile(logFile):
+    showLog = input("Would you like to view the log file after sorting? (y/n): ").strip().lower()
+    if showLog in ["y", "yes"]:
+        print(f"\nDisplaying log file: {logFile}")
+        os.startfile(logFile)
+
 
 def main():
-    parser = argparse.ArgumentParser(description="Sort files in a directory based on their extensions.")
-    parser.add_argument("-c", "--config", type=str, default="config.json", help="Path to the configuration file.")
+    parser = argparse.ArgumentParser(description="AutoFileSort: Automatically sort files based on their extensions into categorized directories.")
+    parser.add_argument("-c", "--config", type=str, default="config.json", help="Path to the configuration file. Defaults to 'config.json'.")
     args = parser.parse_args()
+
+    print("\n--- AutoFileSort v1.2 ---\n")
 
     inputPath = getInputDirectory()
     outputPath = "output"
     randStr = "".join(random.choices("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", k=6))
-    logFile = f"log{randStr}.txt"
+    logFile = f"log_{randStr}.txt"
+
+    writeLogHeader(logFile)
+
+    print(f"\nSorting files from: {inputPath}")
+    print(f"Results will be saved to: {outputPath}\n")
 
     config = loadConfig(args.config)
     sortFiles(inputPath, outputPath, config, logFile)
+    showLogFile(logFile)
 
+    print("\nSorting complete! Press ENTER to exit.")
+    input()
 
 
 if __name__ == "__main__":
     main()
-
-    input("Program was executed successfuly...")
