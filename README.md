@@ -4,18 +4,6 @@ AutoFileSort is a simple yet powerful Python tool designed to help you declutter
 
 ---
 
-## Features
-- **Automatic File Sorting**: Categorizes files into predefined folders like `Documents`, `Images`, `Audio`, `Video`, etc.
-- **Customizable Configurations**: Supports custom `config.json` files for better control over file categorization.
-- **Enhanced Logging**: Logs now include timestamps and detailed summaries of file movements.
-- **Improved Error Handling**: Provides better error feedback if a file move operation fails, including specific error messages.
-- **File Permissions Check**: Checks file permissions before attempting to move them, ensuring there are no issues with read/write access.
-- **Optional Directory Structure Preservation**: Keep the original directory structure while organizing files into categories.
-- **Log Header**: A header is added to each log file to track the start date/time and the overall sorting process.
-- **File Type Summary**: A summary of how many files of each type were moved is displayed at the end and included in the log file.
-  
----
-
 ## Installation
 1. Clone the repository:
    ```bash
